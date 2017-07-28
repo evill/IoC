@@ -1,4 +1,4 @@
-# ioc
+# Inversion of control container
 
 IoC is the library which provides inversion of control functionality for nodejs projects
 
@@ -14,6 +14,9 @@ $ npm install ioc
 
 ## Example Usage
 
-``` js
-var IoC = require('ioc');
-```
+Coming soon
+
+
+## Documentation
+
+- [Backlog](./doc/BACKLOG.md)

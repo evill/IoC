@@ -1,10 +1,9 @@
 {
   "name": "ioc",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "IoC is the library which provides inversion of control functionality for nodejs and browser projects",
   "main": "./lib/index.js",
   "scripts": {
-    "postinstall": "npm run build",
     "test": "mocha --require ./tests/helpers --compilers js:babel-register --ui bdd tests/unit/**/*.js tests/unit/*.js",
     "build": "babel src -d lib"
   },

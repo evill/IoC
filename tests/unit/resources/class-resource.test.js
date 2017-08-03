@@ -1,4 +1,4 @@
-import ClassResource from '../../../lib/resources/class.resource';
+import ClassResource from '../../../src/resources/class.resource';
 import ClassResourceExample from '../../fixtures/resources/class.resource.example';
 import { notFunctions } from '../../fixtures/resources/not-a-function.resource';
 import { dependencyResolverStub } from '../../fixtures/resolve-dependecies.mock';

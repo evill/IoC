@@ -1,4 +1,4 @@
-import Resource from '../../../lib/resources/simple.resource';
+import Resource from '../../../src/resources/simple.resource';
 import simpleResourceExample from '../../fixtures/resources/simple.resource.example';
 
 describe('SimpleResource class', function () {

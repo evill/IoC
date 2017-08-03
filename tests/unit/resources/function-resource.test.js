@@ -1,4 +1,4 @@
-import FunctionResource from '../../../lib/resources/function.resource';
+import FunctionResource from '../../../src/resources/function.resource';
 import functionResourceExample from '../../fixtures/resources/function.resource.example';
 import { notFunctions } from '../../fixtures/resources/not-a-function.resource';
 import { dependencyResolverStub } from '../../fixtures/resolve-dependecies.mock';

@@ -30,3 +30,7 @@ node_modules
 IoC.sublime-project
 
 .idea
+
+# Build
+
+lib

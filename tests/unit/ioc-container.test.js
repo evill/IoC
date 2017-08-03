@@ -1,4 +1,4 @@
-import IoCContainer from '../../lib/ioc-container';
+import IoCContainer from '../../src/ioc-container';
 import { simpleResourceExample, functionResourceExample, ClassResourceExample } from '../fixtures/resources';
 
 const SIMPLE_RESOURCE_NAME = 'config';

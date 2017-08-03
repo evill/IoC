@@ -1,5 +1,5 @@
-import IoCContainer from '../../lib/ioc-container';
-import IoCAggregator from '../../lib/ioc-aggregator';
+import IoCContainer from '../../src/ioc-container';
+import IoCAggregator from '../../src/ioc-aggregator';
 import { simpleResourceExample /*, functionResourceExample, ClassResourceExample*/ } from '../fixtures/resources';
 
 const SIMPLE_RESOURCE_NAME = 'config';

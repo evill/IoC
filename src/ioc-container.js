@@ -26,7 +26,7 @@ class IoCContainer {
      * Creates instance of IoCContainer
      *
      * @param {Object} [settings]
-     * @param {ParentContainer} [settings.parent=null] Will be used for resolve resources in case if they
+     * @param {ParentContainerInterface} [settings.parent=null] Will be used for resolve resources in case if they
      *                                                              are absent in current instance
      * @param {Boolean} [settings.parentExplicit=true] Defines that method resolve will search for resource in parent
      *                                                  in case if it not found in child. In case if passed false parent

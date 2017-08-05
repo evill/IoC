@@ -25,6 +25,16 @@
  * @returns {boolean}
  */
 
+/**
+ * Checks that resource directly registered in container (not in parent)
+ *
+ * @method
+ * @name ParentContainerInterface#hasOwn
+ *
+ * @param {String} name
+ * @returns {boolean}
+ */
+
 
 /**
  * Validate interface of parent container
@@ -38,6 +48,7 @@ export function validateContainerInterface(container) {
         !container ||
         (typeof(container) !== 'object') ||
         (typeof(container.resolve) !== 'function') ||
-        (typeof(container.has) !== 'function')
+        (typeof(container.has) !== 'function') ||
+        (typeof(container.hasOwn) !== 'function')
     );
 }

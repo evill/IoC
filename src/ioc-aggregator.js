@@ -13,8 +13,13 @@ import {validateContainerInterface} from './parent-container.interface';
 export default class IoCAggregator {
     /**
      * @param {ParentContainerInterface[]} [containers=[]]
+     * @param {Object} [settings]
+     * @param {Boolean} [settings.parentExplicit=true] Defines that method resolve will search for resource in parent
+     *                                                  in case if it not found in child. In case if passed false parent
+     *                                                  will be used only for internal mechanism for resolve resources
+     *                                                  dependencies
      */
-    constructor(containers = []) {
+    constructor(containers = [], { parentExplicit} = {}) {
         if (!Array.isArray(containers)) {
             throw new TypeError(`Bad containers type - should be an Array!`);
         }
@@ -22,6 +27,8 @@ export default class IoCAggregator {
         containers.forEach((container, index) => this.validateContainerInterface);
 
         this._containers = containers;
+
+        this._parentExplicit = typeof(parentExplicit) === 'boolean' ? parentExplicit : true;
     }
 
     /**
@@ -61,7 +68,8 @@ export default class IoCAggregator {
      */
     resolve(name) {
         for (let container of this._containers) {
-            if (container.has(name)) {
+            const has = this._parentExplicit ? container.has(name) : container.hasOwn(name);
+            if (has) {
                 return container.resolve(name);
             }
         }
@@ -75,8 +83,27 @@ export default class IoCAggregator {
      * @returns {boolean}
      */
     has(name) {
+        if (this._parentExplicit) {
+            for (let container of this._containers) {
+                if (container.has(name)) {
+                    return true;
+                }
+            }
+        } else {
+            return this.hasOwn(name);
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks that resource exists in aggregator
+     * @param {String} name
+     * @returns {boolean}
+     */
+    hasOwn(name) {
         for (let container of this._containers) {
-            if (container.has(name)) {
+            if (container.hasOwn(name)) {
                 return true;
             }
         }

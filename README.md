@@ -6,11 +6,7 @@ IoC is the library which provides inversion of control functionality for nodejs 
 
 ## Installation
 
-This module is installed via npm:
-
-``` bash
-$ npm install ioc
-```
+Coming soon
 
 ## Example Usage
 

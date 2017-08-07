@@ -111,16 +111,25 @@ class IoCContainer {
     }
     /**
      * Register new resource
+     * 
+     * In case if passed resource will be wrapped to iocClass or iocFunc registrars will be performed registration 
+     * with appropriate method: registerFunc or registerClass.
+     * 
      * @public
+     * 
      * @param  {*} member
      * @param  {String} name Name of resource
      *
      * @return {IoCContainer}
      */
     register(member, name) {
-        let resource = new Resource(member);
+        if ((typeof(member) === 'function') && member.isRegistrar) {
+            member(this, name)
+        } else {
+            let resource = new Resource(member);
 
-        this._registerResource(name, resource);
+            this._registerResource(name, resource);
+        }
 
         return this;
     }

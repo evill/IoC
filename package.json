@@ -1,6 +1,6 @@
 {
   "name": "ioc",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "IoC is the library which provides inversion of control functionality for nodejs and browser projects",
   "main": "./lib/index.js",
   "scripts": {

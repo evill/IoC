@@ -26,7 +26,7 @@ describe('IoCAggregator class', function () {
             this.aggregator = new IoCAggregator();
             this.container = new IoCContainer();
 
-            this.container.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
+            this.container.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
         });
         
         afterEach(function() {
@@ -60,10 +60,10 @@ describe('IoCAggregator class', function () {
             this.aggregator = new IoCAggregator([], { parentExplicit: false });
 
             this.topContainer = new IoCContainer();
-            this.topContainer.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
+            this.topContainer.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
 
             this.container = new IoCContainer({parent: this.topContainer, parentExplicit: true});
-            this.container.registerFunc(functionResourceExample, FUNCTION_RESOURCE_NAME);
+            this.container.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
 
             this.computeTarget = 5;
 
@@ -99,3 +99,4 @@ describe('IoCAggregator class', function () {
         });
     });
 });
+

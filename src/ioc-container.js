@@ -1,7 +1,7 @@
 "use strict";
 
 import Resource from './resources/simple.resource';
-import FunctionResource from './resources/function.resource';
+import FunctionResource from './resources/factory.resource';
 import ClassResource from './resources/class.resource';
 
 /**
@@ -112,17 +112,17 @@ class IoCContainer {
     /**
      * Register new resource
      * 
-     * In case if passed resource will be wrapped to iocClass or iocFunc registrars will be performed registration 
-     * with appropriate method: registerFunc or registerClass.
+     * In case if passed resource will be wrapped to iocClass or iocFactory registrars will be performed registration 
+     * with appropriate method: registerFactory or registerClass.
      * 
      * @public
-     * 
-     * @param  {*} member
+     *
      * @param  {String} name Name of resource
+     * @param  {*} member
      *
      * @return {IoCContainer}
      */
-    register(member, name) {
+    register(name, member) {
         if ((typeof(member) === 'function') && member.isRegistrar) {
             member(this, name)
         } else {
@@ -133,17 +133,35 @@ class IoCContainer {
 
         return this;
     }
+
+    /**
+     * Allows to register several resources with method register
+     *
+     * @param {Object} members - Resources hash where keys are resources names and values a resources or/and registrars
+     *
+     * @return {IoCContainer}
+     */
+    registerAll(members) {
+        for (let memberName in members) {
+            if (members.hasOwnProperty(memberName)) {
+                this.register(memberName, members[memberName]);
+            }
+        }
+
+        return this;
+    }
     /**
      * Register new factory function.
      * For resolving current resource will be executed passed function.
      * @public
-     * @param  {Function} member Factory function
-     * @param  {String} [name=member.name] Name of resource
+     *
+     * @param  {String} name - Name of resource
+     * @param  {Function} member - Factory function
      * @param  {CallableResourceSettings} [settings]
      *
      * @return {IoCContainer}
      */
-    registerFunc(member, name = member.name, settings = {}) {
+    registerFactory(name, member, settings = {}) {
         var resource = new FunctionResource(member, this._resolveResourceDependency.bind(this, name));
 
         this._registerCallable(name, resource, settings);
@@ -154,13 +172,14 @@ class IoCContainer {
      * Register new class factory.
      * For resolving current resource will be created instance of passed constructor.
      * @public
-     * @param  {Function} member Constructor for creation new objects
-     * @param  {String} [name=member.name] Name of resource
+     *
+     * @param  {String} name - Name of resource
+     * @param  {Function} member - Constructor for creation new objects
      * @param  {CallableResourceSettings} [settings]
      *
      * @return {IoCContainer}
      */
-    registerClass(member, name = member.name, settings = {}) {
+    registerClass(name, member, settings = {}) {
         var resource = new ClassResource(member, this._resolveResourceDependency.bind(this, name));
 
         this._registerCallable(name, resource, settings);
@@ -215,4 +234,3 @@ export default IoCContainer;
 function resolveExplicit(val, def = true) {
     return typeof(val) === 'boolean' ? val : def;
 }
-

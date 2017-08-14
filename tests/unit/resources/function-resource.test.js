@@ -1,12 +1,12 @@
-import FunctionResource from '../../../src/resources/function.resource';
+import FunctionResource from '../../../src/resources/factory.resource';
 import functionResourceExample from '../../fixtures/resources/function.resource.example';
 import { notFunctions } from '../../fixtures/resources/not-a-function.resource';
 import { dependencyResolverStub } from '../../fixtures/resolve-dependecies.mock';
 
-describe('FunctionResource class', function () {
+describe('FactoryResource class', function () {
     describe('constructor', function () {
 
-        it('should create new instance of FunctionResource', function () {
+        it('should create new instance of FactoryResource', function () {
             var resource = new FunctionResource(functionResourceExample, dependencyResolverStub);
 
             expect(resource).to.be.an.instanceof(FunctionResource);
@@ -35,3 +35,4 @@ describe('FunctionResource class', function () {
         });
     });
 });
+

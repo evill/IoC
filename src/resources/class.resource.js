@@ -1,10 +1,10 @@
-import CallableResource from './function.resource';
+import FactoryResource from './factory.resource';
 
 /**
  * Provides functionality of IoC resource where resource is constructor
  * which should be instantiated on resolving
  */
-export default class ClassResource extends CallableResource {
+export default class ClassResource extends FactoryResource {
     /**
      * Call constructor/class with dependencies and additional arguments passing
      *
@@ -21,3 +21,4 @@ export default class ClassResource extends CallableResource {
         return new IocConstructor();
     }
 }
+

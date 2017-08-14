@@ -24,6 +24,7 @@ let createRegistrar = (register) => (resource, settings = {}) => {
     registrarResource.isRegistrar = true;
     registrarResource.asSingleton = () => {
         settings.singleton = true;
+        return registrarResource;
     };
 
     return registrarResource;
@@ -39,7 +40,7 @@ let createRegistrar = (register) => (resource, settings = {}) => {
  *
  * @return {IoCRegistrar}
  */
-export let iocClass = createRegistrar((ioc, name, resource, settings) => ioc.registerClass(resource, name, settings));
+export let iocClass = createRegistrar((ioc, name, resource, settings) => ioc.registerClass(name, resource, settings));
 
 /**
  * Creates registrars for class so class can be registered in container using method IoCContainer.register
@@ -51,4 +52,5 @@ export let iocClass = createRegistrar((ioc, name, resource, settings) => ioc.reg
  *
  * @return {IoCRegistrar}
  */
-export let iocFunc = createRegistrar((ioc, name, resource, settings) => ioc.registerFunc(resource, name, settings));
+export let iocFactory = createRegistrar((ioc, name, resource, settings) => ioc.registerFactory(name, resource, settings));
+

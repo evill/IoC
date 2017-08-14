@@ -1,16 +1,48 @@
 import IoCContainer from '../../src/ioc-container';
 import { simpleResourceExample, functionResourceExample, ClassResourceExample } from '../fixtures/resources';
+import { iocFactory, iocClass } from '../../src/ioc-registrars';
 
 const SIMPLE_RESOURCE_NAME = 'config';
 const FUNCTION_RESOURCE_NAME = 'modifier';
 const CLASS_RESOURCE_NAME = 'increment';
 
 describe('IoCContainer class', function () {
+
+    before(function() {
+        let funcResource = functionResourceExample(simpleResourceExample);
+
+        this.target = 5;
+        this.funcResultReference = funcResource(this.target);
+        this.classResultReference = (new ClassResourceExample(simpleResourceExample, funcResource)).compute(this.target);
+    });
+
+    after(function() {
+        delete this.target;
+        delete this.funcResultReference;
+        delete this.classResultReference;
+    });
+
     describe('Constructor', function () {
         it('should create new instance of IoCContainer', function () {
             var ioc = new IoCContainer();
 
             expect(ioc).to.be.an.instanceof(IoCContainer);
+        });
+    });
+
+    describe('method registerAll', function() {
+        it('should allow to register several resources with any type', function () {
+            let ioc = new IoCContainer();
+
+            ioc.registerAll({
+                [SIMPLE_RESOURCE_NAME]: simpleResourceExample,
+                [FUNCTION_RESOURCE_NAME]: iocFactory(functionResourceExample),
+                [CLASS_RESOURCE_NAME]: iocClass(ClassResourceExample)
+            });
+
+            let classResourceValue = ioc.resolve(CLASS_RESOURCE_NAME);
+
+            expect(classResourceValue.compute(this.target)).to.equal(this.classResultReference);
         });
     });
 
@@ -27,7 +59,7 @@ describe('IoCContainer class', function () {
         describe('Simple', function () {
 
             beforeEach(function () {
-                this.ioc.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
+                this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
             });
 
             it('should allow to register it', function () {
@@ -44,8 +76,8 @@ describe('IoCContainer class', function () {
         describe('Function', function () {
 
             beforeEach(function () {
-                this.ioc.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
-                this.ioc.registerFunc(functionResourceExample, FUNCTION_RESOURCE_NAME);
+                this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+                this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
             });
 
             it('should allow to register it', function () {
@@ -53,10 +85,9 @@ describe('IoCContainer class', function () {
             });
 
             it('should allow to resolve result of it invocation and pass all dependencies', function () {
-                let simpleResourceValue = this.ioc.resolve(SIMPLE_RESOURCE_NAME);
                 let funcResourceValue = this.ioc.resolve(FUNCTION_RESOURCE_NAME);
 
-                expect(funcResourceValue(5)).to.equal(functionResourceExample(simpleResourceValue)(5));
+                expect(funcResourceValue(this.target)).to.equal(this.funcResultReference);
             });
 
             it('should not cache result of first resolving for not singleton', function () {
@@ -67,7 +98,7 @@ describe('IoCContainer class', function () {
             });
 
             it('should cache result of first resolving for singleton', function () {
-                this.ioc.registerFunc(functionResourceExample, 'singleton_func', { singleton: true });
+                this.ioc.registerFactory('singleton_func', functionResourceExample, { singleton: true });
 
                 let result1 = this.ioc.resolve('singleton_func');
                 let result2 = this.ioc.resolve('singleton_func');
@@ -79,9 +110,9 @@ describe('IoCContainer class', function () {
         describe('Class', function () {
 
             beforeEach(function () {
-                this.ioc.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
-                this.ioc.registerFunc(functionResourceExample, FUNCTION_RESOURCE_NAME);
-                this.ioc.registerClass(ClassResourceExample, CLASS_RESOURCE_NAME);
+                this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+                this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+                this.ioc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
             });
 
             it('should allow to register it', function () {
@@ -96,11 +127,10 @@ describe('IoCContainer class', function () {
 
             it('should pass defined dependencies', function () {
                 let simpleResourceValue = this.ioc.resolve(SIMPLE_RESOURCE_NAME);
-                let funcResourceValue = this.ioc.resolve(FUNCTION_RESOURCE_NAME);
                 let classResourceValue = this.ioc.resolve(CLASS_RESOURCE_NAME);
 
                 expect(classResourceValue.config).to.equal(simpleResourceValue);
-                expect(classResourceValue.modifier(5)).to.equal(funcResourceValue(5));
+                expect(classResourceValue.modifier(this.target)).to.equal(this.funcResultReference);
             });
 
             it('should not cache result of first resolving for not singleton', function () {
@@ -111,7 +141,7 @@ describe('IoCContainer class', function () {
             });
 
             it('should cache result of first resolving for singleton', function () {
-                this.ioc.registerClass(ClassResourceExample, 'singleton_class', { singleton: true });
+                this.ioc.registerClass('singleton_class', ClassResourceExample, { singleton: true });
 
                 let result1 = this.ioc.resolve('singleton_class');
                 let result2 = this.ioc.resolve('singleton_class');
@@ -122,7 +152,7 @@ describe('IoCContainer class', function () {
 
         describe('Class or Function', function () {
             it('should throw error in case if any dependency is absent on resolving function result', function () {
-                this.ioc.registerFunc(functionResourceExample, FUNCTION_RESOURCE_NAME);
+                this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
 
                 let resolve = () => this.ioc.resolve(FUNCTION_RESOURCE_NAME);
 
@@ -130,7 +160,7 @@ describe('IoCContainer class', function () {
             });
 
             it('should throw error in case if any dependency is absent on resolving class instance', function () {
-                this.ioc.registerClass(ClassResourceExample, CLASS_RESOURCE_NAME);
+                this.ioc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
 
                 let resolve = () => this.ioc.resolve(CLASS_RESOURCE_NAME);
 
@@ -149,26 +179,11 @@ describe('IoCContainer class', function () {
     });
 
     describe('created as child from parent container', function () {
-
-        before(function () {
-            this.computeTarget = 5;
-
-            this.computeReference = (new ClassResourceExample(
-                simpleResourceExample,
-                functionResourceExample(simpleResourceExample)
-            )).compute(this.computeTarget);
-        });
-
-        after(function () {
-            delete this.computeTarget;
-            delete this.computeReference;
-        });
-
         beforeEach(function () {
             this.parentIoc = new IoCContainer();
 
-            this.parentIoc.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
-            this.parentIoc.registerFunc(functionResourceExample, FUNCTION_RESOURCE_NAME);
+            this.parentIoc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+            this.parentIoc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
         });
 
         afterEach(function () {
@@ -179,7 +194,7 @@ describe('IoCContainer class', function () {
             beforeEach(function () {
                 this.childIoc = this.parentIoc.createChild({explicit: true});
 
-                this.childIoc.registerClass(ClassResourceExample, CLASS_RESOURCE_NAME);
+                this.childIoc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
             });
 
             afterEach(function () {
@@ -190,10 +205,10 @@ describe('IoCContainer class', function () {
                 let simpleResourceValue = this.childIoc.resolve(SIMPLE_RESOURCE_NAME);
                 let funcResourceValue = this.childIoc.resolve(FUNCTION_RESOURCE_NAME);
 
-                expect(simpleResourceValue, 'Simple resource didn\'t resolved from parent').to.equal(simpleResourceExample);
-                expect(funcResourceValue(this.computeTarget, 'Func resource didn\'t resolved from parent')).to.equal(
-                    functionResourceExample(simpleResourceValue)(this.computeTarget)
-                );
+                expect(simpleResourceValue, 'Simple resource didn\'t resolved from parent')
+                    .to.equal(simpleResourceExample);
+                expect(funcResourceValue(this.target, 'Func resource didn\'t resolved from parent'))
+                    .to.equal(this.funcResultReference);
             });
 
             it('should resolve dependencies from parent for registered resource', function () {
@@ -201,9 +216,9 @@ describe('IoCContainer class', function () {
 
                 expect(classResourceValue).to.be.an.instanceof(ClassResourceExample);
                 expect(
-                    classResourceValue.compute(this.computeTarget),
+                    classResourceValue.compute(this.target),
                     'Resolved resource behaviour are different due to wrong resolving of dependencies'
-                ).to.equal(this.computeReference);
+                ).to.equal(this.classResultReference);
             });
         });
 
@@ -213,7 +228,7 @@ describe('IoCContainer class', function () {
             beforeEach(function () {
                 this.childIoc = this.parentIoc.createChild({explicit: false});
 
-                this.childIoc.registerClass(ClassResourceExample, CLASS_RESOURCE_NAME);
+                this.childIoc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
             });
 
             afterEach(function () {
@@ -233,9 +248,9 @@ describe('IoCContainer class', function () {
 
                 expect(classResourceValue).to.be.an.instanceof(ClassResourceExample);
                 expect(
-                    classResourceValue.compute(this.computeTarget),
+                    classResourceValue.compute(this.target),
                     'Resolved resource behaviour are different due to wrong resolving of dependencies'
-                ).to.equal(this.computeReference);
+                ).to.equal(this.classResultReference);
             });
         });
 
@@ -248,10 +263,10 @@ describe('IoCContainer class', function () {
                     }
                 };
 
-                this.parentIoc.registerClass(ParentClassResource, CLASS_RESOURCE_NAME);
+                this.parentIoc.registerClass(CLASS_RESOURCE_NAME, ParentClassResource);
                 
                 this.childIoc = this.parentIoc.createChild();
-                this.childIoc.registerClass(ClassResourceExample, CLASS_RESOURCE_NAME);
+                this.childIoc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
             });
 
             afterEach(function () {
@@ -263,9 +278,9 @@ describe('IoCContainer class', function () {
 
                 expect(classResourceValue).to.be.an.instanceof(ClassResourceExample);
                 expect(
-                    classResourceValue.compute(this.computeTarget),
+                    classResourceValue.compute(this.target),
                     'Resolved resource behaviour are different due to wrong resolving of dependencies'
-                ).to.equal(this.computeReference);
+                ).to.equal(this.classResultReference);
             });
         });
     });
@@ -274,3 +289,4 @@ describe('IoCContainer class', function () {
     //   Allows to resolves dependencies
     //   Allows to resolves resources
 });
+

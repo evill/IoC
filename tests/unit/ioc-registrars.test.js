@@ -1,5 +1,5 @@
 import IoCContainer from '../../src/ioc-container';
-import { iocFunc, iocClass } from '../../src/ioc-registrars';
+import { iocFactory, iocClass } from '../../src/ioc-registrars';
 import { simpleResourceExample, functionResourceExample, ClassResourceExample} from '../fixtures/resources';
 
 const SIMPLE_RESOURCE_NAME = 'config';
@@ -24,7 +24,7 @@ describe('Registrar', function () {
     beforeEach(function() {
         this.container = new IoCContainer();
 
-        this.container.register(simpleResourceExample, SIMPLE_RESOURCE_NAME);
+        this.container.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
     });
 
     afterEach(function() {
@@ -35,8 +35,8 @@ describe('Registrar', function () {
 
         it('should correct register function', function () {
             this.container.register(
-                iocFunc(functionResourceExample),
-                FUNCTION_RESOURCE_NAME
+                FUNCTION_RESOURCE_NAME,
+                iocFactory(functionResourceExample)
             );
             
             let funcResourceValue = this.container.resolve(FUNCTION_RESOURCE_NAME);
@@ -46,8 +46,8 @@ describe('Registrar', function () {
 
         it('should correct register func as singleton', function () {
             this.container.register(
-                iocFunc(functionResourceExample).asSingleton(),
-                FUNCTION_RESOURCE_NAME
+                FUNCTION_RESOURCE_NAME,
+                iocFactory(functionResourceExample).asSingleton()
             );
 
             let result1 = this.container.resolve(FUNCTION_RESOURCE_NAME);
@@ -60,13 +60,13 @@ describe('Registrar', function () {
     describe('iocClass', function () {
 
         beforeEach(function() {
-            this.container.registerFunc(functionResourceExample, FUNCTION_RESOURCE_NAME);
+            this.container.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
         });
 
         it('should correct register class', function () {
             this.container.register(
-                iocClass(ClassResourceExample),
-                CLASS_RESOURCE_NAME
+                CLASS_RESOURCE_NAME,
+                iocClass(ClassResourceExample)
             );
 
             let classResourceValue = this.container.resolve(CLASS_RESOURCE_NAME);
@@ -76,8 +76,8 @@ describe('Registrar', function () {
 
         it('should correct register class as singleton', function () {
             this.container.register(
-                iocClass(ClassResourceExample).asSingleton(),
-                CLASS_RESOURCE_NAME
+                CLASS_RESOURCE_NAME,
+                iocClass(ClassResourceExample).asSingleton()
             );
 
             let result1 = this.container.resolve(CLASS_RESOURCE_NAME);
@@ -87,3 +87,4 @@ describe('Registrar', function () {
         });
     });
 });
+

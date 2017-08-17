@@ -34,3 +34,5 @@ IoC.sublime-project
 # Build
 
 lib
+
+.DS_Store

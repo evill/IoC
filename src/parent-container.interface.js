@@ -16,6 +16,17 @@
  */
 
 /**
+ * Returns registered resources by names list
+ *
+ * @method
+ * @name ParentContainerInterface#resolveAll
+ *
+ * @param {String[]} names
+ *
+ * @return {Object}
+ */
+
+/**
  * Checks that resource exists in container
  *
  * @method

@@ -79,6 +79,24 @@ class IoCContainer {
 
         return null;
     }
+
+    /**
+     * Returns registered resources by names list
+     * 
+     * @param {String[]} names
+     * 
+     * @return {Object}
+     */
+    resolveAll(names) {
+        let result = {};
+        
+        for (let name of names) {
+            result[name] = this.resolve(name);
+        }
+        
+        return result;
+    }
+
     /**
      * Cheks is dependencies registered in manager
      *

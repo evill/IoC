@@ -78,6 +78,23 @@ export default class IoCAggregator {
     }
 
     /**
+     * Returns registered resources by names list
+     *
+     * @param {String[]} names
+     *
+     * @return {Object}
+     */
+    resolveAll(names) {
+        let result = {};
+
+        for (let name of names) {
+            result[name] = this.resolve(name);
+        }
+
+        return result;
+    }
+
+    /**
      * Checks that resource exists in aggregator
      * @param {String} name
      * @returns {boolean}

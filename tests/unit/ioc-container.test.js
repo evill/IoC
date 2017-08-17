@@ -46,6 +46,28 @@ describe('IoCContainer class', function () {
         });
     });
 
+    describe('method resolveAll', function() {
+        it('should allow to resolve several resources by list of names', function () {
+            let ioc = new IoCContainer();
+
+            ioc.registerAll({
+                [SIMPLE_RESOURCE_NAME]: simpleResourceExample,
+                [FUNCTION_RESOURCE_NAME]: iocFactory(functionResourceExample).asSingleton(),
+                [CLASS_RESOURCE_NAME]: iocClass(ClassResourceExample).asSingleton()
+            });
+
+            let resourcesValues = ioc.resolveAll([SIMPLE_RESOURCE_NAME, FUNCTION_RESOURCE_NAME, CLASS_RESOURCE_NAME]);
+
+            let resourcesValuesTarget = {
+                [SIMPLE_RESOURCE_NAME]: ioc.resolve(SIMPLE_RESOURCE_NAME),
+                [FUNCTION_RESOURCE_NAME]: ioc.resolve(FUNCTION_RESOURCE_NAME),
+                [CLASS_RESOURCE_NAME]: ioc.resolve(CLASS_RESOURCE_NAME)
+            };
+
+            expect(resourcesValues).to.deep.equal(resourcesValuesTarget);
+        });
+    });
+
     describe('for resource with type', function () {
         
         beforeEach(function () {

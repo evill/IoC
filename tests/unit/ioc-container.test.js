@@ -1,10 +1,10 @@
 import IoCContainer from '../../src/ioc-container';
-import { simpleResourceExample, functionResourceExample, ClassResourceExample } from '../fixtures/resources';
 import { iocFactory, iocClass } from '../../src/ioc-registrars';
-
-const SIMPLE_RESOURCE_NAME = 'config';
-const FUNCTION_RESOURCE_NAME = 'modifier';
-const CLASS_RESOURCE_NAME = 'increment';
+import {
+    simpleResourceExample, SIMPLE_RESOURCE_NAME,
+    functionResourceExample, FUNCTION_RESOURCE_NAME,
+    ClassResourceExample, CLASS_RESOURCE_NAME
+} from '../fixtures/resources';
 
 describe('IoCContainer class', function () {
 

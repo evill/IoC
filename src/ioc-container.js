@@ -218,9 +218,16 @@ class IoCContainer {
         this._resources.set(name, resource);
     }
 
-    _resolveResourceDependency(resourceName, dependencyName) {
+    _resolveResourceDependency(resourceName, dependency) {
+        let dependencyName = dependency.name;
         if (!this.hasOwn(dependencyName) && !this._hasInParent(dependencyName)) {
-            throw new ReferenceError(`Dependency for resource with name '${resourceName}' with name '${dependencyName}' missed in parent`);
+            if (dependency.isRequired()) {
+                throw new ReferenceError(
+                    `Dependency for resource with name '${resourceName}' with name '${dependencyName}' missed in parent!`
+                );
+            } else {
+                return dependency.asDefault();
+            }
         }
         
         if (this.hasOwn(dependencyName)) {

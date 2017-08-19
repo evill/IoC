@@ -1,5 +1,8 @@
+import { SIMPLE_RESOURCE_NAME } from './simple.resource.example';
+import { FUNCTION_RESOURCE_NAME } from './function.resource.example';
+
 export default class ClassResourceExample {
-    static $inject = ['config', 'modifier'];
+    static $inject = [SIMPLE_RESOURCE_NAME, FUNCTION_RESOURCE_NAME];
 
     constructor(config, modifier) {
         this.config = config;
@@ -9,3 +12,5 @@ export default class ClassResourceExample {
         return this.config.increment + this.modifier(target);
     }
 }
+
+export const CLASS_RESOURCE_NAME = 'increment';

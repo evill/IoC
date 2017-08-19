@@ -1,4 +1,5 @@
 import Resource from './simple.resource';
+import { iocRequired, instanceOfDependency } from '../dependencies';
 
 /**
  * Class FactoryResource provides functionality of IoC resource where resource will be resolved via calling of factory
@@ -23,13 +24,27 @@ export default class FactoryResource extends Resource {
         this._resolveDependency = resolveDependency;
         this._signleton = false;
         this._cache = null;
+
+        let rawDependencies = Array.isArray(resource.$inject) ? Array.from(resource.$inject) : [];
         /**
          * List of dependencies which required for passed resource.
          * They will be passed as list of resource arguments.
-         * @type {String[]}
+         * @type {IocDependency[]}
          * @private
          */
-        this._dependencies  = Array.isArray(resource.$inject) ? Array.from(resource.$inject) : [];
+        this._dependencies  = rawDependencies.map(
+            (dependency) => {
+                if (typeof(dependency) === 'string') {
+                    return iocRequired(dependency);
+                } else if (instanceOfDependency(dependency)) {
+                    return dependency;
+                } else {
+                    throw TypeError(
+                        `Bad type of declaration dependency '${dependency}'! Should be string or instance of IocDependency.`
+                    );
+                }
+            }
+        );
     }
 
 

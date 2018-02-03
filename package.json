@@ -1,25 +1,32 @@
 {
-  "name": "ioc",
-  "version": "0.3.0",
+  "name": "ioc-container",
+  "version": "0.4.0",
   "description": "IoC is the library which provides inversion of control functionality for nodejs and browser projects",
   "main": "./lib/index.js",
   "scripts": {
     "test": "mocha --require ./tests/helpers --compilers js:babel-register --ui bdd tests/unit/**/*.js tests/unit/*.js",
     "build": "babel src -d lib"
   },
+  "keywords": [
+    "IoC", "inversion of control", "inversion of control container", "DI", "dependency injection"
+  ],
+  "author": {
+    "name": "Igor Tretyakov",
+    "email": "igorexat@gmail.com"
+  },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/evill/ioc"
   },
-  "keywords": [
-    "IoC inversion of control container dependency injection"
-  ],
-  "author": "Igor Tretyakov",
-  "license": "MIT",
+  "homepage": "https://github.com/evill/ioc",
   "bugs": {
     "url": "https://github.com/evill/ioc/issues"
   },
-  "dependencies": {},
+  "files": [
+    "lib/*.js",
+    "src/*.js"
+  ],
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",

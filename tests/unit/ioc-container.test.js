@@ -188,6 +188,59 @@ describe('IoCContainer class', function () {
 
                 expect(resolve, 'didn\'t throw error for missed dependencies').to.throw(ReferenceError);
             });
+
+            it('should be registered as singleton in case if resource property $singleton set to TRUE', function () {
+                let SingletonClass = class extends ClassResourceExample {
+                    static $singleton = true;
+                };
+
+                this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+                this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+                this.ioc.registerClass(CLASS_RESOURCE_NAME, SingletonClass);
+                
+                let instance1 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+                let instance2 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+
+                expect(instance1).to.be.equal(instance2);
+            });
+
+            it('should be registered as singleton in case if resource property $singleton set to TRUE', function () {
+                let SingletonClass = class extends ClassResourceExample {
+                    static $singleton = true;
+                };
+
+                this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+                this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+                this.ioc.registerClass(CLASS_RESOURCE_NAME, SingletonClass);
+
+                let instance1 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+                let instance2 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+
+                expect(instance1).to.be.equal(instance2);
+            });
+
+            it('should allow to override dependencies using method settings parameter', function () {
+                let ioc = new IoCContainer();
+                
+                const anotherConfig = {
+                    multiplier: 100,
+                    increment: 4
+                };
+
+                ioc.register('config2', anotherConfig);
+                ioc.registerFactory(
+                    FUNCTION_RESOURCE_NAME, functionResourceExample, { dependencies: ['config2']}
+                );
+                ioc.registerClass(
+                    CLASS_RESOURCE_NAME,    ClassResourceExample,    { dependencies: ['config2', FUNCTION_RESOURCE_NAME]}
+                );
+
+                const computeResult = ioc.resolve(CLASS_RESOURCE_NAME).compute(this.target);
+                const funcResource = functionResourceExample(anotherConfig);
+                const classResultReference = (new ClassResourceExample(anotherConfig, funcResource)).compute(this.target);
+
+                expect(computeResult).to.be.equal(classResultReference);
+            });
         });
 
         describe('Simple, Function or Class', function () {
@@ -304,6 +357,44 @@ describe('IoCContainer class', function () {
                     'Resolved resource behaviour are different due to wrong resolving of dependencies'
                 ).to.equal(this.classResultReference);
             });
+        });
+    });
+
+    describe('for classes and factories which should be singletons', function () {
+        beforeEach(function () {
+            this.ioc = new IoCContainer();
+            this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+            this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+        });
+        
+        afterEach(function() {
+            delete this.ioc;
+        });
+
+        it('should be registered resource as singleton in case if resource property $singleton set to TRUE', function () {
+            let SingletonClass = class extends ClassResourceExample {
+                static $singleton = true;
+            };
+
+            this.ioc.registerClass(CLASS_RESOURCE_NAME, SingletonClass);
+
+            let instance1 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+            let instance2 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+
+            expect(instance1).to.be.equal(instance2);
+        });
+
+        it('should used setting singleton from method call instead of resource $singleton property', function () {
+            let SingletonClass = class extends ClassResourceExample {
+                static $singleton = false;
+            };
+
+            this.ioc.registerClass(CLASS_RESOURCE_NAME, SingletonClass, { singleton: true });
+
+            let instance1 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+            let instance2 = this.ioc.resolve(CLASS_RESOURCE_NAME);
+
+            expect(instance1).to.be.equal(instance2);
         });
     });
 

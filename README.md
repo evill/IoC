@@ -2,18 +2,16 @@
 
 # Introduction
 
-IoC Container is the library which provides inversion of control functionality for javascript projects.
-
-Documentation still in progress
+This library which provides inversion of control functionality for javascript projects and implements IoC Container pattern.
 
 ## Links to articles
 * [Fowler: Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
-* [Fowler: Inversion of control] (https://martinfowler.com/bliki/InversionOfControl.html)
+* [Fowler: Inversion of control](https://martinfowler.com/bliki/InversionOfControl.html)
 * [Wiki: Inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control)
 
 # Installation
 
-`npm install ioc-container`
+`npm install libioc`
 
 # Usage
 
@@ -26,7 +24,7 @@ Base usage of ioc container in application can be described by follow phases:
 Creation of new IoC Container
 
 ```javascript
-import {IoCContainer} from 'ioc-container';
+import {IoCContainer} from 'libioc';
 
 let container = new IoCContainer();
 ```
@@ -44,7 +42,7 @@ For any resource which you want to store in container should be passed name of t
 used for associate registered resource with string identifier which can be used for resolve resource from container in future.
 
 ```javascript
-import {IoCContainer} from 'ioc-container';
+import {IoCContainer} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -102,7 +100,7 @@ Under the hood registrars don't change origin function. They just assists to ioc
 **Example of unified registration for single resource:**
 
 ```javascript
-import {IoCContainer, iocFactory, iocClass} from 'ioc-container';
+import {IoCContainer, iocFactory, iocClass} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -125,7 +123,7 @@ container.register(
 **Example of unified registration for several resources:**
 
 ```javascript
-import {IoCContainer, iocFactory, iocClass} from 'ioc-container';
+import {IoCContainer, iocFactory, iocClass} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -142,8 +140,8 @@ The main responsibility of IoC Container is resolve dependencies and pass them t
 List of dependencies is array of resources names which should be registered in IoC container.
 For declare list of dependencies for factory or class target function which will be registered in IoC container should defines special property '$inject' with array of dependencies names.
  
-```javascript```
-import {IoCContainer, iocFactory, iocClass} from 'ioc-container';
+```javascript
+import {IoCContainer, iocFactory, iocClass} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -201,7 +199,7 @@ For specify that dependency is optional for dependency name should be used wrapp
 Example of usage:
 
 ```javascript
-import {IoCContainer, iocFactory, iocClass, iocOptional} from 'ioc-container';
+import {IoCContainer, iocFactory, iocClass, iocOptional} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -228,7 +226,7 @@ container.registerAll({
 There is possible to specify default value for optional dependency, which will be used is case if dependency absent in container, instead of Null:
 
 ```javascript
-import {IoCContainer, iocFactory, iocClass, iocOptional} from 'ioc-container';
+import {IoCContainer, iocFactory, iocClass, iocOptional} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -269,7 +267,7 @@ container.resolve('someClass');
 ### Resource property
  
 ```javascript
-import {IoCContainer} from 'ioc-container';
+import {IoCContainer} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -289,7 +287,7 @@ container.registerClass('someClass', SomeClass);
 ### Methods parameter (setting) 
  
 ```javascript
-import {IoCContainer} from 'ioc-container';
+import {IoCContainer} from 'libioc';
 
 let container = new IoCContainer();
 
@@ -309,7 +307,7 @@ Using of registration method setting has higher priority that resource property.
 ### Unified registration
 
 ```javascript
-import {IoCContainer, iocFactory, iocClass} from 'ioc-container';
+import {IoCContainer, iocFactory, iocClass} from 'libioc';
 
 let container = new IoCContainer();
 

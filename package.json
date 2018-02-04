@@ -1,11 +1,12 @@
 {
-  "name": "ioc-container",
-  "version": "0.4.0",
-  "description": "IoC is the library which provides inversion of control functionality for nodejs and browser projects",
+  "name": "libioc",
+  "version": "1.0.2",
+  "description": "IoC Coontainer is the library which provides inversion of control functionality for nodejs and browser projects",
   "main": "./lib/index.js",
   "scripts": {
     "test": "mocha --require ./tests/helpers --compilers js:babel-register --ui bdd tests/unit/**/*.js tests/unit/*.js",
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "prepack": "npm run build"
   },
   "keywords": [
     "IoC",
@@ -28,8 +29,10 @@
     "url": "https://github.com/evill/ioc/issues"
   },
   "files": [
-    "lib/*.js",
-    "src/*.js"
+    "lib/",
+    "src/",
+    ".babelrc",
+    "./npm-shrinkwrap.json"
   ],
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -42,7 +45,7 @@
     "mocha": "^5.0.0",
     "pre-push": "^0.1.1"
   },
-  "engines" : {
-    "node" : ">=8.9.4 <9"
+  "engines": {
+    "node": ">=8.9.4 <9"
   }
 }

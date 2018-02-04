@@ -6,7 +6,8 @@ Foundation
 - [ ] Remove excess things like tests, travis config, documentation from npm package
 - [ ] Provide creation of release on GitHub
 - [ ] Provide eslint validation
-- [ ] Register package in yarn 
+- [ ] Register package in yarn
+- [ ] Provide shrinkwrap file inside package
 
 Documentation
 -------------

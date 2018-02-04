@@ -36,3 +36,5 @@ IoC.sublime-project
 lib
 
 .DS_Store
+
+./npm-shrinkwrap.json

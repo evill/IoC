@@ -1,7 +1,7 @@
 {
-  "name": "ioc-container",
-  "version": "0.4.0",
-  "description": "IoC is the library which provides inversion of control functionality for nodejs and browser projects",
+  "name": "libioc",
+  "version": "1.0.0",
+  "description": "IoC Coontainer is the library which provides inversion of control functionality for nodejs and browser projects",
   "main": "./lib/index.js",
   "scripts": {
     "test": "mocha --require ./tests/helpers --compilers js:babel-register --ui bdd tests/unit/**/*.js tests/unit/*.js",

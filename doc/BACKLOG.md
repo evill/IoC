@@ -3,27 +3,21 @@ Backlog
 
 Foundation
 ----------
-
-- [ ] Complete unit tests
-- [ ] Write usage documentation
-- [ ] Provide npm package
+- [ ] Remove excess things like tests, travis config, documentation from npm package
+- [ ] Provide creation of release on GitHub
 - [ ] Provide eslint validation
-- [ ] Register package in yarn 
-- [x] Provide CI with travis
+- [ ] Register package in yarn
+- [ ] Provide shrinkwrap file inside package
 
 Documentation
 -------------
 
 - [ ] Provide main API documentation
-- [ ] Provide base usage examples
 - [ ] Provide advanced usage examples and blueprints
 
 Features
 --------
 
-- [x] Ability to specify list of dependencies factories and classes on resource registration instead of resource definition
-  * Pass list of dependencies to methods `registerFactory` and `registerClass`
-  * Pass list of dependencies using `iocClass` and `iocFactory` registrars for unified registration.
 - [ ] Provide ability of two way connection between composition of resources. Example - Register.
 - [ ] IoC Container validation
   * Provide ability to resolve list of missed dependencies in container using method `findMissedDependencies() : Array|Null`
@@ -38,7 +32,6 @@ Features
 - [ ] Provide decorators:
   * List of dependencies
   * Resource aliases
-- [x] Provide building of assets by babel
 
 Integrations
 ------------

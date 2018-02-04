@@ -142,7 +142,7 @@ The main responsibility of IoC Container is resolve dependencies and pass them t
 List of dependencies is array of resources names which should be registered in IoC container.
 For declare list of dependencies for factory or class target function which will be registered in IoC container should defines special property '$inject' with array of dependencies names.
  
-```javascript```
+```javascript
 import {IoCContainer, iocFactory, iocClass} from 'ioc-container';
 
 let container = new IoCContainer();

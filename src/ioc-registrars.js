@@ -13,17 +13,39 @@
 /**
  * Creates registrar bound concrete method which registers resource in ioc container
  *
- * @param {Function} register
+ * @param {Function} register Function which performs registration of ioc in container.
+ *                            IoC container and standard parameters for registration will be passed as function
+ *                            arguments to this function when container will register resource registrar
  *
  * @return {Function} Call of returned function will create IoCRegistrar
  */
 let createRegistrar = (register) => (resource, settings = {}) => {
     let registrarResource = (ioc, name) => register(ioc, name, resource, settings);
 
+    /**
+     * Holds origin resource
+     * @type {Function}
+     */
     registrarResource.origin = resource;
+    /**
+     * Property allow to check that function is registrar
+     * @type {boolean}
+     */
     registrarResource.isRegistrar = true;
+    /**
+     * Call of this method mark registrar resource as singleton
+     * @returns {function(): *} Registrar function
+     */
     registrarResource.asSingleton = () => {
         settings.singleton = true;
+        return registrarResource;
+    };
+    /**
+     * Allows to define override list resource dependencies
+     * @returns {function(): *} Registrar function
+     */
+    registrarResource.withDependencies = (...args) => {
+        settings.dependencies = args;
         return registrarResource;
     };
 

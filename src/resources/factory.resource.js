@@ -10,7 +10,7 @@ export default class FactoryResource extends Resource {
      * @param {Function} resource - factory, which should build and return resource
      * @param {Function} resolveDependency Function which resolve dependencies
      */
-    constructor(resource, resolveDependency) {
+    constructor(resource, resolveDependency, dependencies = null) {
         super(resource);
 
         if (typeof resource !== 'function') {
@@ -20,12 +20,24 @@ export default class FactoryResource extends Resource {
         if (typeof(resolveDependency) !== 'function') {
             throw new TypeError('Function for resolving dependencies has bad type!');
         }
+        
+        
 
         this._resolveDependency = resolveDependency;
-        this._signleton = false;
+        this._signleton = typeof(resource.$singleton) === 'boolean' ? resource.$singleton : false;
         this._cache = null;
+        
+        let rawDependencies;
 
-        let rawDependencies = Array.isArray(resource.$inject) ? Array.from(resource.$inject) : [];
+        if (dependencies) {
+            if (!Array.isArray(dependencies)) {
+                throw new TypeError('List of dependencies should be an Array!');
+            }
+
+            rawDependencies = dependencies;
+        } else {
+            rawDependencies = Array.isArray(resource.$inject) ? Array.from(resource.$inject) : [];
+        }
         /**
          * List of dependencies which required for passed resource.
          * They will be passed as list of resource arguments.

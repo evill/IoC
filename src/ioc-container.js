@@ -13,6 +13,8 @@ import ClassResource from './resources/class.resource';
  *                                          resource. This setting is usefult to prevent implement logic of singleton
  *                                          classes and function with cached results inside resources - this
  *                                          responsibility takes IoC Container.
+ * @property {String[]} [dependencies] - Defines list of resource dependencies. If resource defines own property $inject
+ *                                       it will be ignored and instead will be used this setting
  */
 
 /**
@@ -180,7 +182,9 @@ class IoCContainer {
      * @return {IoCContainer}
      */
     registerFactory(name, member, settings = {}) {
-        var resource = new FunctionResource(member, this._resolveResourceDependency.bind(this, name));
+        var resource = new FunctionResource(
+            member, this._resolveResourceDependency.bind(this, name), settings.dependencies
+        );
 
         this._registerCallable(name, resource, settings);
 
@@ -198,7 +202,9 @@ class IoCContainer {
      * @return {IoCContainer}
      */
     registerClass(name, member, settings = {}) {
-        var resource = new ClassResource(member, this._resolveResourceDependency.bind(this, name));
+        var resource = new ClassResource(
+            member, this._resolveResourceDependency.bind(this, name), settings.dependencies
+        );
 
         this._registerCallable(name, resource, settings);
 

@@ -8,7 +8,8 @@ Foundation
 - [ ] Write usage documentation
 - [ ] Provide npm package
 - [ ] Provide eslint validation
-- [ ] Provide CI with travis
+- [ ] Register package in yarn 
+- [x] Provide CI with travis
 
 Documentation
 -------------
@@ -20,6 +21,10 @@ Documentation
 Features
 --------
 
+- [x] Ability to specify list of dependencies factories and classes on resource registration instead of resource definition
+  * Pass list of dependencies to methods `registerFactory` and `registerClass`
+  * Pass list of dependencies using `iocClass` and `iocFactory` registrars for unified registration.
+- [ ] Provide ability of two way connection between composition of resources. Example - Register.
 - [ ] IoC Container validation
   * Provide ability to resolve list of missed dependencies in container using method `findMissedDependencies() : Array|Null`
   * Provide ability validate that all resources and dependencies exists in container using method `validate() : Boolean`
@@ -29,11 +34,11 @@ Features
 - [ ] Parent(s) filter
   * Provide ability to set which resources and dependencies can be resolved from parent container on IoC Container or Aggregator creation.  
   * Provide ability to pass filter to method getChild
-- [ ] Provide building of assets by babel
 - [ ] Provide ability to use aliases for resources names
 - [ ] Provide decorators:
   * List of dependencies
   * Resource aliases
+- [x] Provide building of assets by babel
 
 Integrations
 ------------

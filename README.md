@@ -8,7 +8,7 @@ Documentation still in progress
 
 ## Links to articles
 * [Fowler: Inversion of Control Containers and the Dependency Injection pattern](https://martinfowler.com/articles/injection.html)
-* [Fowler: Inversion of control] (https://martinfowler.com/bliki/InversionOfControl.html)
+* [Fowler: Inversion of control](https://martinfowler.com/bliki/InversionOfControl.html)
 * [Wiki: Inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control)
 
 # Installation

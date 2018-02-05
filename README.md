@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/evill/IoC.svg?branch=master)](https://travis-ci.org/evill/IoC)
+[![npm](https://img.shields.io/npm/v/libioc.svg)](https://www.npmjs.com/package/libioc)
 
 # Introduction
 

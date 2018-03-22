@@ -1,6 +1,6 @@
 {
   "name": "libioc",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "IoC Coontainer is the library which provides inversion of control functionality for nodejs and browser projects",
   "main": "./src/index.js",
   "scripts": {

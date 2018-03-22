@@ -7,4 +7,5 @@ branches:
     - master
     - develop
     - /^release\/.*$/
+    - /^feature\/.*$/
 

@@ -31,10 +31,11 @@ IoC.sublime-project
 
 .idea
 
+.DS_Store
+
 # Build
 
 lib
-
-.DS_Store
+dist
 
 ./npm-shrinkwrap.json

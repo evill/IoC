@@ -401,5 +401,60 @@ describe('IoCContainer class', function () {
     // Accepts ioc aggregator
     //   Allows to resolves dependencies
     //   Allows to resolves resources
+
+    describe('method findMissedDependencies', function() {
+        beforeEach(function () {
+            this.ioc = new IoCContainer();
+        });
+
+        afterEach(function () {
+            delete this.ioc;
+        });
+
+        it('should return null if there are no missed dependencies', function () {
+            this.ioc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+            this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+            this.ioc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
+
+            expect(this.ioc.findMissedDependencies()).to.be.null;
+        });
+
+        it('should return an array of missed dependency names if there are any', function () {
+            this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+            this.ioc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
+
+            const missedDependencies = this.ioc.findMissedDependencies();
+
+            expect(missedDependencies).to.be.an('array');
+            expect(missedDependencies).to.have.members([SIMPLE_RESOURCE_NAME, FUNCTION_RESOURCE_NAME]);
+        });
+
+        it('should not include optional dependencies in the returned array', function () {
+            const optionalDependencyName = 'optionalDependency';
+            functionResourceExample.$inject = [{name: optionalDependencyName, optional: true}];
+
+            this.ioc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+            this.ioc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
+
+            const missedDependencies = this.ioc.findMissedDependencies();
+
+            expect(missedDependencies).to.be.an('array');
+            expect(missedDependencies).to.not.include(optionalDependencyName);
+        });
+
+        it('should check for dependencies in the parent container', function () {
+            const parentIoc = new IoCContainer();
+            parentIoc.register(SIMPLE_RESOURCE_NAME, simpleResourceExample);
+
+            const childIoc = parentIoc.createChild();
+            childIoc.registerFactory(FUNCTION_RESOURCE_NAME, functionResourceExample);
+            childIoc.registerClass(CLASS_RESOURCE_NAME, ClassResourceExample);
+
+            const missedDependencies = childIoc.findMissedDependencies();
+            
+            expect(missedDependencies).to.be.an('array');
+            expect(missedDependencies).to.have.members([FUNCTION_RESOURCE_NAME]);
+        });
+    });
 });
 

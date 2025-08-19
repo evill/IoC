@@ -258,6 +258,27 @@ class IoCContainer {
             parentExplicit: resolveExplicit(explicit)
         });
     }
+
+    /**
+     * Find all missed dependencies for registered resources
+     * 
+     * @return {String[]|Null}
+     */
+    findMissedDependencies() {
+        const missedDependencies = new Set();
+
+        for (const resource of this._resources.values()) {
+            if (resource._dependencies && resource._dependencies.length) {
+                for (const dependency of resource._dependencies) {
+                    if (dependency.isRequired() && !this.has(dependency.name)) {
+                        missedDependencies.add(dependency.name);
+                    }
+                }
+            }
+        }
+
+        return missedDependencies.size ? Array.from(missedDependencies) : null;
+    }
 }
 
 export default IoCContainer;
